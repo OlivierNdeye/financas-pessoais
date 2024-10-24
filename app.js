@@ -40,6 +40,29 @@ class Bd {
 
         localStorage.setItem('id', id);
     }
+
+    recuperaTodosRegistros() {
+        let despesas = Array();
+
+        let id = localStorage.getItem('id');
+
+        //recupera todas as despesas cadastradas em localStorage
+        for(let i = 1; i <= id; i++) {
+
+            //recuperar a despesa
+            let despesa = JSON.parse(localStorage.getItem(i));
+
+
+            //verificar a possibilidade de haver itens que foram pulados/removidos
+            //nestes casos nós vamos pular esses itens
+            if(despesa === null) {
+                continue
+            }
+
+            despesas.push(despesa);
+        }
+        return despesas;
+    }
 }
 
 let bd = new Bd();
@@ -67,17 +90,70 @@ function cadastrarDespesa() {
     if(despesa.validarDados()) {
         bd.gravar(despesa);
         //dialog de sucesso
-        $('#sucessoGravacao').modal('show')
+        $('#modalRegistraDespesa').modal('show');
+        
+        function criaDialogSucesso(){
+            let textoSucesso = 'Despesa adicionada com sucesso';
+            let textBtn = 'Voltar';
+            document.getElementById('titulo_modal').innerHTML = textoSucesso;
+            document.getElementById('modal_titulo_div').className = 'modal-header text-success';
+            document.getElementById('botao').innerHTML = textBtn;
+            document.getElementById('botao').className = 'btn btn-success';
+        }
+        criaDialogSucesso();
     } else {
         //dialog de erro
-        $('#erroGravacao').modal('show')
+        $('#modalRegistraDespesa').modal('show')
+    //---------------------------------------------------------
+
+
+        //  exibe a caixa de dialogo de gravação com sucesso
+        function criaDialogErro(){
+            let textoErro = 'Erro na gravação';
+            let textBtn = 'Voltar e corrigir';
+            document.getElementById('titulo_modal').innerHTML = textoErro;
+            document.getElementById('botao').innerHTML = textBtn;
+            document.getElementById('modal_titulo_div').className = 'modal-header text-danger';
+            document.getElementById('botao').className = 'btn btn-danger';
+
+
+        }
+        criaDialogErro();
     }    
 }
 
 
 //acionar o modal de erro de gravação
 $('#myModal').on('shown.bs.modal', function () {
-    $('#myInput').trigger('focus')
+    $('#myInput').trigger('focus');
   })
 
 
+//método para carregar lista de despesas
+
+function carregarListaDespesas() {
+
+    let despesas = Array()
+
+    despesas = bd.recuperaTodosRegistros()
+
+    // recupera o elemento tbody da tabela
+    var listaDespesas = document.getElementById('listaDespesas');
+
+    /*
+    <tr>
+        <td>27/10/2024</td>
+        <td>Lazer</td>
+        <td>Netflix</td>
+        <td>59.90</td>
+    </tr>
+    */
+
+   //percorendo o array despesas, listando cadas despensa de forma dinamica
+   despesas.forEach(function(d) {
+
+        //cria uma linha da tabela
+        listaDespesas.insertRow();
+   })
+
+}
