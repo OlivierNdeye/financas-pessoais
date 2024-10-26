@@ -88,7 +88,7 @@ function cadastrarDespesa() {
 
 
     if(despesa.validarDados()) {
-        bd.gravar(despesa);
+        //bd.gravar(despesa);
         //dialog de sucesso
         $('#modalRegistraDespesa').modal('show');
         
@@ -101,6 +101,19 @@ function cadastrarDespesa() {
             document.getElementById('botao').className = 'btn btn-success';
         }
         criaDialogSucesso();
+
+        //limpando campos
+        function limpaCampos() {
+            ano.value = '';
+            mes.value = '';
+            dia.value = '';
+            tipo.value = '';
+            descricao.value = '';
+            valor.value = '';
+        }
+        limpaCampos();
+
+
     } else {
         //dialog de erro
         $('#modalRegistraDespesa').modal('show')
@@ -174,8 +187,6 @@ function carregarListaDespesas() {
             linha.insertCell(3).innerHTML = d.valor;
             
         console.log(d.tipo)
-
-
    })
 
 }
