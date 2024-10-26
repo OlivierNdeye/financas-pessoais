@@ -240,32 +240,33 @@ function pesquisarDespesa(){
 
     let despesas = bd.pesquisar(despesa);
 
-        // recupera o elemento tbody da tabela
-        let listaDespesas = document.getElementById('listaDespesas');
-        listaDespesas.innerHTML = ''
+    // recupera o elemento tbody da tabela
+    let listaDespesas = document.getElementById('listaDespesas');
+    listaDespesas.innerHTML = ''
+
+    //percorendo o array despesas
+
+    despesas.forEach(function(d) {    
+        //cria uma linha de consulta (tr)
+        let linha = listaDespesas.insertRow();
+
+        //ajustar o tipo
+        switch(d.tipo) {
+            case '1': d.tipo = 'Alimentação';
+                break;
+            case '2': d.tipo = 'Educação';
+                break;
+            case '3': d.tipo = 'Lazer';
+                break;
+            case '4': d.tipo = 'Saúde';
+                break;                     
+        }
+            
+            //criar colunas da tabela da consulta(td)
+            linha.insertCell(0).innerHTML = `${d.dia} / ${d.mes} / ${d.ano}` ;
+            linha.insertCell(1).innerHTML = d.tipo;
+            linha.insertCell(2).innerHTML = d.descricao;
+            linha.insertCell(3).innerHTML = d.valor;            
+    });
     
-       //percorendo o array despesas
-       despesas.forEach(function(d) {
-    
-            //cria uma linha de consulta (tr)
-           let linha = listaDespesas.insertRow();
-    
-           //ajustar o tipo
-           switch(d.tipo) {
-               case '1': d.tipo = 'Alimentação';
-                   break;
-               case '2': d.tipo = 'Educação';
-                   break;
-               case '3': d.tipo = 'Lazer';
-                   break;
-               case '4': d.tipo = 'Saúde';
-                   break;                     
-                }
-                
-                //criar colunas da tabela da consulta(td)
-                linha.insertCell(0).innerHTML = `${d.dia} / ${d.mes} / ${d.ano}` ;
-                linha.insertCell(1).innerHTML = d.tipo;
-                linha.insertCell(2).innerHTML = d.descricao;
-                linha.insertCell(3).innerHTML = d.valor;            
-       });
 }
