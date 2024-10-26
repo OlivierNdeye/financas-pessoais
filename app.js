@@ -138,7 +138,7 @@ function carregarListaDespesas() {
     despesas = bd.recuperaTodosRegistros()
 
     // recupera o elemento tbody da tabela
-    var listaDespesas = document.getElementById('listaDespesas');
+    let listaDespesas = document.getElementById('listaDespesas');
 
     /*
     <tr>
@@ -152,8 +152,30 @@ function carregarListaDespesas() {
    //percorendo o array despesas, listando cadas despensa de forma dinamica
    despesas.forEach(function(d) {
 
-        //cria uma linha da tabela
-        listaDespesas.insertRow();
+        //cria uma linha da tabela (tr)
+       let linha = listaDespesas.insertRow();
+
+       //ajustar o tipo
+       switch(d.tipo) {
+           case '1': d.tipo = 'Alimentação';
+               break;
+           case '2': d.tipo = 'Educação';
+               break;
+           case '3': d.tipo = 'Lazer';
+               break;
+           case '4': d.tipo = 'Saúde';
+               break;                     
+            }
+            
+            //criar colunas da tabela(td)
+            linha.insertCell(0).innerHTML = `${d.dia} / ${d.mes} / ${d.ano}` ;
+            linha.insertCell(1).innerHTML = d.tipo;
+            linha.insertCell(2).innerHTML = d.descricao;
+            linha.insertCell(3).innerHTML = d.valor;
+            
+        console.log(d.tipo)
+
+
    })
 
 }
