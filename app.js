@@ -101,7 +101,7 @@ class Bd {
             despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor);
         }
 
-        console.log(despesasFiltradas);
+        return despesasFiltradas;
     }
 }
 
@@ -184,14 +184,15 @@ $('#myModal').on('shown.bs.modal', function () {
 
 //método para carregar lista de despesas
 
-function carregarListaDespesas() {
+function carregarListaDespesas(despesas = Array(), filter = false) {
 
-    let despesas = Array()
-
-    despesas = bd.recuperaTodosRegistros()
+    if(despesas.length == 0 && filter == false){
+        despesas = bd.recuperaTodosRegistros()
+    }
 
     // recupera o elemento tbody da tabela
     let listaDespesas = document.getElementById('listaDespesas');
+    listaDespesas.innerHTML = '';
 
     /*
     <tr>
@@ -228,45 +229,19 @@ function carregarListaDespesas() {
    });
 }
 
-function pesquisarDespesa(){
+function pesquisarDespesa() {
     let ano = document.getElementById('ano').value
     let mes = document.getElementById('mes').value
     let dia = document.getElementById('dia').value
     let tipo = document.getElementById('tipo').value
     let descricao = document.getElementById('descricao').value
     let valor = document.getElementById('valor').value
-
+    
     let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor);    
-
+    
     let despesas = bd.pesquisar(despesa);
 
-    // recupera o elemento tbody da tabela
-    let listaDespesas = document.getElementById('listaDespesas');
-    listaDespesas.innerHTML = ''
+    carregarListaDespesas(despesas, true)
+   
 
-    //percorendo o array despesas
-
-    despesas.forEach(function(d) {    
-        //cria uma linha de consulta (tr)
-        let linha = listaDespesas.insertRow();
-
-        //ajustar o tipo
-        switch(d.tipo) {
-            case '1': d.tipo = 'Alimentação';
-                break;
-            case '2': d.tipo = 'Educação';
-                break;
-            case '3': d.tipo = 'Lazer';
-                break;
-            case '4': d.tipo = 'Saúde';
-                break;                     
-        }
-            
-            //criar colunas da tabela da consulta(td)
-            linha.insertCell(0).innerHTML = `${d.dia} / ${d.mes} / ${d.ano}` ;
-            linha.insertCell(1).innerHTML = d.tipo;
-            linha.insertCell(2).innerHTML = d.descricao;
-            linha.insertCell(3).innerHTML = d.valor;            
-    });
-    
 }
